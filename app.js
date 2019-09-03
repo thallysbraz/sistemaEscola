@@ -19,123 +19,135 @@ const usuarios = require("./routes/usuario");
 const app = express();
 
 //configurações
-  
-  //Sessão
-    app.use(session({
-      secret: "885A5AE84FFE73BAB99184CA5B04F405",
-      resave: true,
-      saveUninitialized: true
-    }));
 
-    app.use(passport.initialize());
-    app.use(passport.session());
-    app.use(flash());
+//Sessão
+app.use(
+  session({
+    secret: "885A5AE84FFE73BAB99184CA5B04F405",
+    resave: true,
+    saveUninitialized: true
+  })
+);
 
-  
-  //Middleware
-    app.use((req, res, next) => {
-      res.locals.success_msg = req.flash("success_msg");
-      res.locals.error_msg = req.flash("error_msg");
-      res.locals.error = req.flash("error");
-      res.locals.user = req.user || null;
-      next();
-    });
-  
-  //Body-parser
-    app.use(bodyParser.urlencoded({extended: true}));
-    app.use(bodyParser.json());
-  
-  //Handlebars
-    app.engine("handlebars", handlebars({defaultLayout: "main"}));
-    app.set("view engine", "handlebars");
-  
-  //Mongoose
-    mongoose.Promise = global.Promise;
-    mongoose.connect("mongodb://localhost/blogapp").then(() =>{
-      console.log("conectado ao banco MONGODB");
-    }).catch((err) => {
-      console.log("error ao conectar no banco " + err);
-    });
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
 
-  //Public
-    app.use(express.static(path.join(__dirname, "public")));
-    app.use((req, res, next) =>{
-      next();
-    });
+//Middleware
+app.use((req, res, next) => {
+  res.locals.success_msg = req.flash("success_msg");
+  res.locals.error_msg = req.flash("error_msg");
+  res.locals.error = req.flash("error");
+  res.locals.user = req.user || null;
+  next();
+});
 
-    
-//rotas
-  app.get("/", (req, res) => {
-    Postagem.find().populate("categoria").sort({data: "desc"}).then((postagens ) => {
-      res.render("index", {postagens: postagens});
-    }).catch((err) => {
-        req.flash("error_msg", "Error interno ");
-        res.redirect("/404");
-    });
-    
+//Body-parser
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+//Handlebars
+app.engine("handlebars", handlebars({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
+
+//Mongoose
+mongoose.Promise = global.Promise;
+mongoose
+  .connect("mongodb://localhost/blogapp")
+  .then(() => {
+    console.log("conectado ao banco MONGODB");
+  })
+  .catch(err => {
+    console.log("error ao conectar no banco " + err);
   });
 
-  app.get("/postagem/:slug", (req, res) => {
-    Postagem.findOne({slug: req.params.slug}).then((postagem) => {
-      if(postagem){
-        res.render("postagem/index", {postagem: postagem})
-      }
-      else{
-        req.flash("error_msg", "Esta postagem não existe!"); 
+//Public
+app.use(express.static(path.join(__dirname, "public")));
+app.use((req, res, next) => {
+  next();
+});
+
+//rotas
+app.get("/", (req, res) => {
+  Postagem.find()
+    .populate("categoria")
+    .sort({ data: "desc" })
+    .then(postagens => {
+      res.render("index", { postagens: postagens });
+    })
+    .catch(err => {
+      req.flash("error_msg", "Error interno ");
+      res.redirect("/404");
+    });
+});
+
+app.get("/postagem/:slug", (req, res) => {
+  Postagem.findOne({ slug: req.params.slug })
+    .then(postagem => {
+      if (postagem) {
+        res.render("postagem/index", { postagem: postagem });
+      } else {
+        req.flash("error_msg", "Esta postagem não existe!");
         res.redirect("/");
       }
-    }).catch((err) => {
-      req.flash("error_msg", "Error interno ao buscar postagem"); 
+    })
+    .catch(err => {
+      req.flash("error_msg", "Error interno ao buscar postagem");
       res.redirect("/");
     });
-  });
+});
 
-
-  //rota para listar categorias
-  app.get("/categorias", (req, res) => {
-    Categoria.find().then((categorias) => {
-      res.render("categorias/index", {categorias: categorias});
-    }).catch((err) =>{
+//rota para listar categorias
+app.get("/categorias", (req, res) => {
+  Categoria.find()
+    .then(categorias => {
+      res.render("categorias/index", { categorias: categorias });
+    })
+    .catch(err => {
       req.flash("error_msg", "Error ao listar categorias");
       res.redirect("/");
     });
-  });
+});
 
-  app.get("/categorias/:slug", (req, res) => {
-    Categoria.findOne({slug: req.params.slug}).then((categoria) => {
-      if(categoria){
-        Postagem.find({categoria: categoria._id}).then((postagens) => {
-          res.render("categorias/postagens", {postagens: postagens, categoria: categoria});
-          
-        }).catch((err) => {
-          req.flash("error_msg", "Error ao listar posts!");
-          res.redirect("/categorias")
-        });
-      }
-      else{
+app.get("/categorias/:slug", (req, res) => {
+  Categoria.findOne({ slug: req.params.slug })
+    .then(categoria => {
+      if (categoria) {
+        Postagem.find({ categoria: categoria._id })
+          .then(postagens => {
+            res.render("categorias/postagens", {
+              postagens: postagens,
+              categoria: categoria
+            });
+          })
+          .catch(err => {
+            req.flash("error_msg", "Error ao listar posts!");
+            res.redirect("/categorias");
+          });
+      } else {
         req.flash("error_msg", "Essa categoria não existe");
         res.redirect("/categorias");
       }
-    }).catch((err) => {
+    })
+    .catch(err => {
       req.flash("error_msg", "Houve error ao carregar está página!");
       res.redirect("/categorias");
     });
-  });
+});
 
-  app.get("/404", (req, res) => {
-    res.send("Erro 404!");
-  })
+app.get("/404", (req, res) => {
+  res.send("Erro 404!");
+});
 
-  app.get("/posts", (req, res) => {
-    res.send("rota principal(posts)");
-  });
+app.get("/posts", (req, res) => {
+  res.send("rota principal(posts)");
+});
 
-  app.use("/admin", admin); // rota admin
-  app.use("/usuarios", usuarios) // rota usuario
+app.use("/admin", admin); // rota admin
+app.use("/usuarios", usuarios); // rota usuario
 //outros
 
 app.listen(3000);
-
 
 /*
 

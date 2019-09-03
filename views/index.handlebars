@@ -1,17 +1,21 @@
 <div class="jumbotron">
-  <h1 class="display-4">Bem-vindo ao App-Thallys!</h1>
-  <p class="lead">Essa e uma aplicação que é semelhante a um blog.</p>
-  <hr class="my-4">
-  <p>Desenvolvida com NodeJS e MongoDB</p>
-  <a class="btn btn-primary btn-lg" href="/usuarios/registro" role="button">Crie uma conta</a>
+    <h1 class="display-4">Bem-vindo ao App-Thallys!</h1>
+    <p class="lead">Essa e uma aplicação que é semelhante a um blog.</p>
+    <hr class="my-4">
+    <p>Desenvolvida com NodeJS e MongoDB</p>
+    {{#if user}}
+    {{else}}
+    <a class="btn btn-primary btn-lg" href="/usuarios/registro" role="button">Crie uma conta</a>
+    {{/if}}
 </div>
 
 <hr>
 
-<h2>Postagens recentes: </h2>
+<h2>Informações recentes recentes: </h2>
 
 {{#each postagens}}
-<div class ="card mt-4">
+
+<div class="card mt-4">
     <div class="card-body">
         <h3>{{titulo}}</h3>
         <p>{{descricao}}</p><br>
@@ -19,10 +23,11 @@
         <hr>
         <small>Categoria: {{categoria.nome}}</small><br>
         <small>Data de publicação: {{data}}</small>
-        
     </div>
 </div>
 
 {{else}}
-    <h5>Nenhuma postagem.</h5>
+
+<h5 class="alert alert-danger">Nenhuma postagem</h5>
+
 {{/each}}
