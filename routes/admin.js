@@ -36,13 +36,13 @@ router.post("/categorias/nova", eAdmin, (req, res) =>{
     if(!req.body.nome || typeof req.body.nome == undefined || req.body.nome == null){
         erros.push({texto: "Nome invalido"});
     }
-
+    
     if(!req.body.slug || typeof req.body.slug == undefined || req.body.slug == null){
         erros.push({texto: "Slug invalido"});
     }
-
+    
     if(erros.length > 0){
-        req.redirect("/admin", {erros: erros});
+        res.render("admin/addcategorias", {erros: erros});
     }
     else{
         const novaCategoria = {
