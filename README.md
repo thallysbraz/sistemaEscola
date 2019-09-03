@@ -47,8 +47,3 @@ npm install
 ```bash
 nodemon app.js
 ```
-
-## Quero saber mais!
-
-<p align="justify">Para mais informações e maiores esclarecimentos, visite o nosso repositório principal, 
-clicando <a href="https://github.com/fga-eps-mds/2019.1-Ludum">aqui</a></p>
