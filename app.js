@@ -63,6 +63,7 @@ const app = express();
       next();
     });
 
+    
 //rotas
   app.get("/", (req, res) => {
     Postagem.find().populate("categoria").sort({data: "desc"}).then((postagens ) => {

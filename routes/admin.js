@@ -41,6 +41,7 @@ router.post("/categorias/nova", eAdmin, (req, res) =>{
         erros.push({texto: "Slug invalido"});
     }
     
+    
     if(erros.length > 0){
         res.render("admin/addcategorias", {erros: erros});
     }
