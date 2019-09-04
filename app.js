@@ -157,10 +157,3 @@ app.use("/usuarios", usuarios); // rota usuario
 //outros
 
 app.listen(3000);
-
-/*
-
-AULA 60
-
-
-*/
