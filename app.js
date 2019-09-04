@@ -140,7 +140,16 @@ app.get("/404", (req, res) => {
 });
 
 app.get("/posts", (req, res) => {
-  res.send("rota principal(posts)");
+  Postagem.find()
+    .populate("categoria")
+    .sort({ data: "desc" })
+    .then(postagens => {
+      res.render("posts", { postagens: postagens });
+    })
+    .catch(err => {
+      req.flash("error_msg", "Error interno ");
+      res.redirect("/404");
+    });
 });
 
 app.use("/admin", admin); // rota admin
@@ -153,6 +162,5 @@ app.listen(3000);
 
 AULA 60
 
-http://localhost:3000/admin/categorias
 
 */
