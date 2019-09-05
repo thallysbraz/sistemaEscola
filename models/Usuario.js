@@ -17,6 +17,14 @@ const Usuario = new Schema({
   senha: {
     type: String,
     required: true
+  },
+  passwordResetToken: {
+    type: String,
+    select: false
+  },
+  passwordResetExpires: {
+    type: Date,
+    select: false
   }
 });
 

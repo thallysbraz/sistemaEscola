@@ -2,7 +2,9 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
 const passport = require("passport");
+const mailer = require("../modules/mailer");
 
 require("../models/Usuario");
 
@@ -188,6 +190,51 @@ router.get("/logout", (req, res) => {
   req.logout();
   req.flash("success_msg", "Deslogado com sucesso!");
   res.redirect("/");
+});
+
+router.get("/forgot_password", (req, res) => {
+  res.render("usuarios/forgot_password");
+});
+
+router.post("/forgot_password", async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await Usuario.findOne({ email }); // verificando se o email esta cadastrado
+
+    if (!user) return res.status(400).send({ error: "Usuario não existe" });
+
+    const token = crypto.randomBytes(20).toString("hex"); //gerando um token
+
+    const now = new Date();
+    now.setHours(now.getHours() + 1);
+
+    await Usuario.findByIdAndUpdate(user.id, {
+      $set: {
+        passwordResetToken: token,
+        passwordResetExpires: now
+      }
+    });
+    //console.log(token, now);
+    mailer.sendMail(
+      {
+        to: email,
+        from: "thallys.braz@firstdecision.com.br",
+        template: "auth/forgot_password",
+        context: { token }
+      },
+      err => {
+        if (err)
+          res
+            .status(401)
+            .send({ error: "Cannot send forgot password email, ok" });
+        return res.send("ok, email enviado!");
+      }
+    );
+  } catch (err) {
+    console.log(err);
+    res.status(400).send({ error: "Error na rota de esqueci minha senha." });
+  }
 });
 
 module.exports = router;
