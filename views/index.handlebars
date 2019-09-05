@@ -1,15 +1,15 @@
 <div>
     <div class="jumbotron ">
-        <h1 class="display-4">Bem-vindo ao App-Thallys!</h1>
-        <p class="lead">Essa e uma aplicação que é semelhante a um blog.</p>
-        <hr class="my-4">
-        <p>Desenvolvido com NodeJS e MongoDB</p>
+        <div class="text-center">
+            <h1 class="display-4"><strong>Bem-vindo ao App-Thallys!</strong></h1>
+            <p class="lead"><strong>Essa e uma aplicação que é semelhante a um blog.</strong></p>
+            <hr class="my-4">
+        </div>
         {{#if user}}
         {{else}}
-        <a class="btn btn-primary btn-lg" href="/usuarios/registro" role="button">Crie uma conta</a>
+        <p class="lead"><strong>Não esta cadastrado? Crie uma conta agora!</strong></p>
+        <a class="btn btn-primary btn-lg" href="/usuarios/registro" role="button">Criar conta</a>
         {{/if}}
-
-
 
         <br><br>
 

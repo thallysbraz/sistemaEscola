@@ -6,6 +6,7 @@ const passport = require("passport");
 
 require("../models/Usuario");
 
+const { eAdmin } = require("../helpers/eAdmin");
 const Usuario = mongoose.model("usuarios");
 
 router.get("/registro", (req, res) => {
@@ -87,12 +88,12 @@ router.post("/registro", (req, res) => {
   }
 });
 
-router.get("/registroADM", (req, res) => {
+router.get("/registroADM", eAdmin, (req, res) => {
   res.render("usuarios/registroADM");
 });
 
 //validação de usuário
-router.post("/registroADM", (req, res) => {
+router.post("/registroADM", eAdmin, (req, res) => {
   var erros = [];
   if (
     !req.body.nome ||

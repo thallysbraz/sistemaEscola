@@ -1,15 +1,15 @@
 <div class="card">
     <div class="card-body">
         <h4>Login:</h4>
-        <form action="/usuarios/login" method="POST">
+        <form class="mt-4" action="/usuarios/login" method="POST">
             <label for="email">Email: </label>
             <input type="email" class="form-control" name="email" placeholder="Email" required>
             <label for="senha">Senha: </label>
             <input type="password" class="form-control" name="password" placeholder="Email" required>
             <button class="btn btn-primary btn-lg btn-block mt-4" type="submit">Entrar</button>
-            <p class="txt-center ls-login-signup mt-4">Não possui um usuário na cadastrado?
-                <a href="/usuarios/registro">Cadastre-se agora</a>
-            </p>
+            <br>
+            <a href="/usuarios/registro">Recuperar senha</a><br>
+            <a href="/usuarios/registro">Cadastre-se agora</a>
         </form>
     </div>
 </div>

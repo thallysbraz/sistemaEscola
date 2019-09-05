@@ -1,21 +1,23 @@
 <div>
     <div class="jumbotron ">
-        <h1 class="display-4">Página de categorias!</h1>
-        {{#if user}}
-        {{else}}
-        <a class="btn btn-primary btn-lg" href="/usuarios/registro" role="button">Crie uma conta</a>
-        {{/if}}
+        <h1 class="display-4 text-center">Página de categorias!</h1>
 
-        <br>
-        <div class="mt-4">
+        <div class="card-body">
+
             {{#each categorias}}
             <a href="/categorias/{{slug}}">
-                <h5>{{nome}}</h5>
+                <button class="btn btn-primary btn-lg btn-block mt-4">{{nome}}</button>
             </a>
-            <hr>
-            {{else}}
 
+            {{else}}
             {{/each}}
+
+            {{#if user}}
+            {{else}}
+            <a class="btn btn-primary mt-4" href="/usuarios/registro" role="button">Crie uma conta</a>
+            {{/if}}
+
         </div>
+
     </div>
 </div>
