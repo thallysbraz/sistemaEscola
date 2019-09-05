@@ -202,8 +202,10 @@ router.post("/forgot_password", async (req, res) => {
   try {
     const user = await Usuario.findOne({ email }); // verificando se o email esta cadastrado
 
-    if (!user) return res.status(400).send({ error: "Usuario não existe" });
-
+    if (!user) {
+      //continuar daqui
+      return res.status(400).send({ error: "Usuario não existe" });
+    }
     const token = crypto.randomBytes(20).toString("hex"); //gerando um token
 
     const now = new Date();
@@ -228,12 +230,51 @@ router.post("/forgot_password", async (req, res) => {
           res
             .status(401)
             .send({ error: "Cannot send forgot password email, ok" });
-        return res.send("ok, email enviado!");
+        res.redirect("/reset_password");
       }
     );
   } catch (err) {
     console.log(err);
     res.status(400).send({ error: "Error na rota de esqueci minha senha." });
+  }
+});
+
+router.get("/reset_password", (req, res) => {
+  res.render("usuario/reset_password");
+});
+
+router.post("/reset_password", async (req, res) => {
+  const { email, token, senha } = req.body;
+  console.log("entrou na reset password");
+  try {
+    const user = await Usuario.findOne({ email }).select(
+      "+passwordResetToken passwordResetExpires"
+    );
+
+    if (!user)
+      //verificando se usuário exites
+      return res.status(400).send({ error: "User not found reset password" });
+
+    console.log(token);
+    if (token !== user.passwordResetToken)
+      // verificar se o token e valido
+      return res.status(400).send({ error: "Token invalido" });
+
+    //verificar se o token esta expirado
+    const now = new Date();
+
+    if (now > user.passwordResetExpires)
+      return res
+        .status(400)
+        .send({ error: "Token expired, generate a new token" });
+
+    user.senha = senha;
+    console.log(user.senha);
+    await user.save();
+
+    res.redirect("/");
+  } catch (err) {
+    res.status(400).send({ error: "Cannot reset passord, try again" });
   }
 });
 
