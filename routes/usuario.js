@@ -302,8 +302,6 @@ router.post("/reset_password", async (req, res) => {
           });
       });
     });
-
-    res.redirect("/");
   } catch (err) {
     res.status(400).send({ error: "Cannot reset passord, try again" });
   }

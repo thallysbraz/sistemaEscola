@@ -53,7 +53,7 @@ app.set("view engine", "handlebars");
 //Mongoose
 mongoose.Promise = global.Promise;
 mongoose
-  .connect("mongodb://localhost/blogapp")
+  .connect("mongodb://localhost/sistemaEscola")
   .then(() => {
     console.log("conectado ao banco MONGODB");
   })
