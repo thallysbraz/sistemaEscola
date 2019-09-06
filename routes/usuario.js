@@ -203,7 +203,6 @@ router.post("/forgot_password", async (req, res) => {
     const user = await Usuario.findOne({ email }); // verificando se o email esta cadastrado
 
     if (!user) {
-      //continuar daqui
       return res.status(400).send({ error: "Usuario não existe" });
     }
     const token = crypto.randomBytes(20).toString("hex"); //gerando um token
@@ -226,51 +225,85 @@ router.post("/forgot_password", async (req, res) => {
         context: { token }
       },
       err => {
-        if (err)
+        if (err) {
           res
             .status(401)
             .send({ error: "Cannot send forgot password email, ok" });
-        res.redirect("/reset_password");
+        }
       }
     );
+    //console.log("chegou aqui");
+
+    res.redirect("/usuarios/reset_password");
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     res.status(400).send({ error: "Error na rota de esqueci minha senha." });
   }
 });
 
 router.get("/reset_password", (req, res) => {
-  res.render("usuario/reset_password");
+  res.render("usuarios/reset_password");
 });
 
 router.post("/reset_password", async (req, res) => {
   const { email, token, senha } = req.body;
-  console.log("entrou na reset password");
+  const user = await Usuario.findOne({ email });
+  if (!user) {
+    //verificando se email e valido. arrumar vieew de error
+    return res.status(400).send({ error: "Usuario não existe2" });
+  }
   try {
     const user = await Usuario.findOne({ email }).select(
       "+passwordResetToken passwordResetExpires"
     );
 
-    if (!user)
+    if (!user) {
       //verificando se usuário exites
       return res.status(400).send({ error: "User not found reset password" });
-
-    console.log(token);
-    if (token !== user.passwordResetToken)
+    }
+    //console.log(token);
+    if (token !== user.passwordResetToken) {
       // verificar se o token e valido
       return res.status(400).send({ error: "Token invalido" });
-
+    }
     //verificar se o token esta expirado
     const now = new Date();
 
-    if (now > user.passwordResetExpires)
+    if (now > user.passwordResetExpires) {
       return res
         .status(400)
         .send({ error: "Token expired, generate a new token" });
+    }
+    //atualizando senha.
 
     user.senha = senha;
-    console.log(user.senha);
-    await user.save();
+    //console.log("user senha:", user.senha);
+    //await user.save();
+
+    bcrypt.genSalt(10, (erro, salt) => {
+      bcrypt.hash(user.senha, salt, (erro, hash) => {
+        if (erro) {
+          req.flash("error_msg", "Error ao salvar usuário");
+          res.redirect("/");
+        }
+        user.senha = hash;
+        console.log("hash: ");
+        console.log("user.senha: ");
+        user
+          .save()
+          .then(() => {
+            req.flash("success_msg", "senha alterada com sucesso!");
+            res.redirect("/");
+          })
+          .catch(err => {
+            req.flash(
+              "error_msg",
+              "Error ao criar o usuário, tente novamente!"
+            );
+            res.redirect("/usuarios/registro");
+          });
+      });
+    });
 
     res.redirect("/");
   } catch (err) {
