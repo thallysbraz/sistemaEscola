@@ -287,8 +287,6 @@ router.post("/reset_password", async (req, res) => {
           res.redirect("/");
         }
         user.senha = hash;
-        console.log("hash: ");
-        console.log("user.senha: ");
         user
           .save()
           .then(() => {
