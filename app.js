@@ -8,6 +8,7 @@ const admin = require("./routes/admin");
 const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
+const nodemailer = require("nodemailer");
 
 require("./models/Categoria");
 require("./models/Postagem");
@@ -79,6 +80,11 @@ app.get("/", (req, res) => {
       req.flash("error_msg", "Error interno ");
       res.redirect("/404");
     });
+});
+
+//view amostra de contact // Usar para cadastrar usuário
+app.get("/contact", (req, res) => {
+  res.render("contact");
 });
 
 app.get("/postagem/:slug", (req, res) => {

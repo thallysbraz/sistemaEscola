@@ -250,7 +250,8 @@ router.post("/reset_password", async (req, res) => {
   const user = await Usuario.findOne({ email });
   if (!user) {
     //verificando se email e valido. arrumar vieew de error
-    return res.status(400).send({ error: "Usuario não existe2" });
+    req.flash("error_msg", "Usuario não existe");
+    res.redirect("/usuarios/reset_password");
   }
   try {
     const user = await Usuario.findOne({ email }).select(
@@ -259,21 +260,28 @@ router.post("/reset_password", async (req, res) => {
 
     if (!user) {
       //verificando se usuário exites
-      return res.status(400).send({ error: "User not found reset password" });
+      req.flash("error_msg", "Usuário incorreto!");
+      res.redirect("/usuarios/reset_password");
     }
     //console.log(token);
     if (token !== user.passwordResetToken) {
       // verificar se o token e valido
-      return res.status(400).send({ error: "Token invalido" });
+      req.flash("error_msg", "Token invalido");
+      res.redirect("/usuarios/reset_password");
     }
     //verificar se o token esta expirado
     const now = new Date();
 
     if (now > user.passwordResetExpires) {
-      return res
-        .status(400)
-        .send({ error: "Token expired, generate a new token" });
+      req.flash("error_msg", "Token expirado, por favor gerar novo token");
+      res.redirect("/usuarios/reset_password");
     }
+
+    if (req.body.senha != req.body.senha2) {
+      req.flash("error_msg", "Senhas são diferentes");
+      res.redirect("/usuarios/reset_password");
+    }
+
     //atualizando senha.
 
     user.senha = senha;
