@@ -181,6 +181,36 @@ router.post("/registroADM", eAdmin, (req, res) => {
               novoUsuario
                 .save()
                 .then(() => {
+                  //iniciando envio de email
+                  let transporter = nodemailer.createTransport({
+                    service: "gmail",
+                    auth: {
+                      user: process.env.EMAIL,
+                      pass: process.env.PASSWORD
+                    }
+                  });
+
+                  let mailOptions = {
+                    from: "",
+                    to: req.body.email,
+                    subject: "Seja bem-vindo", //assunto
+                    text: "Bem-vindo ao Blog App"
+                  };
+
+                  transporter.sendMail(mailOptions, function(err, data) {
+                    if (err) {
+                      req.flash(
+                        "error_msg",
+                        "Error ao criar o usuário, tente novamente!"
+                      );
+                      res.redirect("/usuarios/registro");
+                      //console.log("error occurs: ", err);
+                    } else {
+                      console.log("email enviado!!!");
+                    }
+                  });
+
+                  //finalizando envio de email
                   req.flash(
                     "success_msg",
                     "Usuário Admnistrador criado com sucesso!"
