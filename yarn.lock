@@ -2290,6 +2290,13 @@ nodemailer-express-handlebars@^3.1.0:
   dependencies:
     express-handlebars "^3.0.0"
 
+nodemailer-handlebars@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/nodemailer-handlebars/-/nodemailer-handlebars-1.0.1.tgz#55abc0d1fbb05351972738efd8a48ee97d1b4ba0"
+  integrity sha512-doSPCuWpHXoU1/EvmzsNhMlesk/F4zA0PIWdDKqwgEMGdjgCRazYC5VrWCt28VnwiWS8FrqE/Su3HwaozjY8NQ==
+  dependencies:
+    express-handlebars "^3.0.0"
+
 nodemailer@^6.3.0:
   version "6.3.0"
   resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-6.3.0.tgz#a89b0c62d3937bdcdeecbf55687bd7911b627e12"

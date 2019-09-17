@@ -6,6 +6,7 @@ const crypto = require("crypto");
 const passport = require("passport");
 const mailer = require("../modules/mailer");
 const nodemailer = require("nodemailer");
+const hbs = require("nodemailer-handlebars");
 
 require("dotenv").config();
 require("../models/Usuario");
@@ -278,23 +279,45 @@ router.post("/forgot_password", async (req, res) => {
         passwordResetExpires: now
       }
     });
-    //console.log(token, now);
-    mailer.sendMail(
-      {
-        to: email,
-        from: "thallys.braz@firstdecision.com.br",
-        template: "auth/forgot_password",
-        context: { token }
-      },
-      err => {
-        if (err) {
-          res
-            .status(401)
-            .send({ error: "Cannot send forgot password email, ok" });
-        }
+    //iniciando envio de email
+    let transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.PASSWORD
       }
-    );
-    //console.log("chegou aqui");
+    });
+    //step 2
+    /*transporter.use(
+      "compile",
+      hbs({
+        viewEngine: "express-handlebars",
+        viewPath: "../views/Welcome"
+      })
+    );*/
+    //step 3
+    let mailOptions = {
+      from: "",
+      to: req.body.email,
+      subject: "olá", //assunto
+      text: token,
+      template: "Welcome",
+      context: {
+        name: "Accime Esterling"
+      }
+    };
+
+    transporter.sendMail(mailOptions, function(err, data) {
+      if (err) {
+        req.flash("error_msg", "Error ao enviar token, tente novamente!");
+        res.redirect("usuarios/forgot_password");
+        //console.log("error occurs: ", err);
+      } else {
+        console.log("email enviado!!!");
+      }
+    });
+
+    //finalizando envio de email
 
     res.redirect("/usuarios/reset_password");
   } catch (err) {
