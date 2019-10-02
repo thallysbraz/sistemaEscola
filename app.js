@@ -8,11 +8,12 @@ const admin = require("./routes/admin");
 const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
-const nodemailer = require("nodemailer");
 
+require("./models/Usuario");
 require("./models/Categoria");
 require("./models/Postagem");
 require("./config/auth")(passport);
+//require("./config/authADM")(passport);
 
 const Categoria = mongoose.model("categorias");
 const Postagem = mongoose.model("postagens");
@@ -40,8 +41,22 @@ app.use((req, res, next) => {
   res.locals.error_msg = req.flash("error_msg");
   res.locals.error = req.flash("error");
   res.locals.user = req.user || null;
+  if (global.adm == true) {
+    res.locals.adm2 = true;
+  } else {
+    res.locals.adm2 = false;
+  }
   next();
 });
+/*
+app.use((req, res, next) => {
+  if (global.adm == true) {
+    res.locals.adm2 = true;
+  } else {
+    res.locals.adm2 = false;
+  }
+  next();
+});*/
 
 //Body-parser
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -54,7 +69,7 @@ app.set("view engine", "handlebars");
 //Mongoose
 mongoose.Promise = global.Promise;
 mongoose
-  .connect("mongodb://localhost/sistemaEscola")
+  .connect("mongodb://localhost/sistemaEscola", { useNewUrlParser: true })
   .then(() => {
     console.log("conectado ao banco MONGODB");
   })
