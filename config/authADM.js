@@ -4,9 +4,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
 //Model de usuário
-
 require("../models/Usuario");
-
 const Usuario = mongoose.model("usuarios");
 
 module.exports = function(passport) {
@@ -19,11 +17,6 @@ module.exports = function(passport) {
           } else {
             bcrypt.compare(senha, usuario.senha, (erro, batem) => {
               if (batem) {
-                if (usuario.eAdmin == true) {
-                  global.adm = true;
-                } else {
-                  global.adm = false;
-                }
                 return done(null, usuario);
               } else {
                 return done(null, false, { message: "Senha incorreta" });
@@ -45,4 +38,3 @@ module.exports = function(passport) {
     });
   });
 };
-//parei aqui app quebrou

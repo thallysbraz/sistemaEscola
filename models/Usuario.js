@@ -11,7 +11,7 @@ const Usuario = new Schema({
     required: true
   },
   eAdmin: {
-    type: Number,
+    type: Boolean,
     default: 0
   },
   senha: {
