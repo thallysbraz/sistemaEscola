@@ -22,23 +22,31 @@
       <li class="nav-item">
         <a class="nav-link" href="/admin">Gerenciar</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/usuarios/logout">Sair</a>
-      </li>
+
       {{else}}
-      <li class="nav-item">
-        <a class="nav-link" href="/usuarios/logout">Sair</a>
-      </li>
+
       {{/if}}
+
       {{else}}
-      <li class="nav-item">
-        <a class="nav-link" href="/usuarios/login">Login</a>
-      </li>
       <li class="nav-item">
         <a class="nav-link" href="/usuarios/registro">Registro</a>
       </li>
       {{/if}}
+
     </ul>
+    {{#if user}}
+    <ul class="nav justify-content-end">
+      <li class="nav-item">
+        <a class="nav-link" href="/usuarios/logout"><i class="fas fa-sign-out-alt"></i> Sair</a>
+      </li>
+    </ul>
+    {{else}}
+    <ul class="nav justify-content-end">
+      <li class="nav-item">
+        <a class="nav-link" href="/usuarios/login"><i class="fas fa-sign-in-alt"></i> Login</a>
+      </li>
+    </ul>
+    {{/if}}
   </div>
 
 </nav>
