@@ -61,6 +61,7 @@ router.post("/registro", (req, res) => {
             email: req.body.email,
             senha: req.body.senha
           });
+          const pass = req.body.senha;
           bcrypt.genSalt(10, (erro, salt) => {
             bcrypt.hash(novoUsuario.senha, salt, (erro, hash) => {
               if (erro) {
@@ -71,48 +72,49 @@ router.post("/registro", (req, res) => {
               novoUsuario
                 .save()
                 .then(() => {
-                  //iniciando envio de email
-                  let transporter = nodemailer.createTransport({
-                    service: "gmail",
-                    auth: {
-                      user: process.env.EMAIL,
-                      pass: process.env.PASSWORD
-                    }
-                  });
-
-                  let mailOptions = {
-                    from: "",
-                    to: req.body.email,
-                    subject: "Seja bem-vindo", //assunto
-                    text: "Bem-vindo ao Blog App"
-                  };
-
-                  transporter.sendMail(mailOptions, function(err, data) {
-                    if (err) {
-                      req.flash(
-                        "error_msg",
-                        "Error ao criar o usuário, tente novamente!"
-                      );
-                      res.redirect("/usuarios/registro");
-                      //console.log("error occurs: ", err);
-                    } else {
-                      console.log("email enviado!!!");
-                    }
-                  });
-
-                  //finalizando envio de email
                   req.flash("success_msg", "Usuário criado com sucesso!");
-                  res.redirect("/");
                 })
                 .catch(err => {
                   req.flash(
                     "error_msg",
                     "Error ao criar o usuário, tente novamente!"
                   );
-                  res.redirect("/usuarios/registro");
                 });
             });
           });
+          const matricula = novoUsuario._id;
+          console.log("pass: ", pass);
+          console.log("matricula: ", matricula);
+          //iniciando envio de email
+          let transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+              user: process.env.EMAIL,
+              pass: process.env.PASSWORD
+            }
+          });
+
+          let mailOptions = {
+            from: "",
+            to: req.body.email,
+            subject: "Seja bem-vindo", //assunto
+            text: matricula
+          };
+
+          transporter.sendMail(mailOptions, function(err, data) {
+            if (err) {
+              req.flash(
+                "error_msg",
+                "Error ao criar o usuário, tente novamente!"
+              );
+              res.redirect("/usuarios/registro");
+              //console.log("error occurs: ", err);
+            } else {
+              res.redirect("/");
+            }
+          });
+
+          //finalizando envio de email
         }
       })
       .catch(err => {

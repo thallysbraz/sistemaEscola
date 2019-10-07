@@ -1,9 +1,7 @@
 const mongoose = require("mongoose");
-const express = require("express");
-
 const Schema = mongoose.Schema;
 
-const Categoria = new Schema({
+const Mencao = new Schema({
   nome: {
     type: String,
     require: true
@@ -12,13 +10,13 @@ const Categoria = new Schema({
     type: String,
     require: true
   },
-  date: {
+  disciplina: {
     type: Date,
     default: Date.now()
   },
-  mencao: {
-    enum: ["SS"]
+  nota: {
+    num: String
   }
 });
 
-mongoose.model("categorias", Categoria);
+mongoose.model("mencoes", Mencao);
