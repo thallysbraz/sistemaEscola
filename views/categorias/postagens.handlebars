@@ -11,14 +11,16 @@
         <br><br>
 
         <div>
-            <h1>{{categoria.nome}}</h1>
+            <h1>
+                <center>{{categoria.nome}}</center>
+            </h1>
         </div>
         {{#each postagens}}
         <div class="card mt-4">
             <div class="card-body">
                 <h3>{{titulo}}</h3>
                 <p>{{descricao}}</p><br>
-                <a href="/postagem/{{slug}}"><button class="btn btn-success">Leia mais!</button></a>
+                <a href="/postagem/{{slug}}"><button class="btn btn-success">Leia!</button></a>
                 <hr>
                 <small>Data de publicação: {{data}}</small>
 

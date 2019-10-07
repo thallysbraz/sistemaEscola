@@ -85,11 +85,11 @@ app.use((req, res, next) => {
 
 //rotas
 app.get("/", (req, res) => {
-  Postagem.find()
+  Categoria.find()
     .populate("categoria")
     .sort({ data: "desc" })
-    .then(postagens => {
-      res.render("index", { postagens: postagens });
+    .then(categorias => {
+      res.render("index", { categorias: categorias });
     })
     .catch(err => {
       req.flash("error_msg", "Error interno ");

@@ -7,24 +7,23 @@
         </div>
         {{#if user}}
         {{else}}
-        <p class="lead"><strong>Não esta cadastrado? Crie uma conta agora!</strong></p>
-        <a class="btn btn-primary btn-lg" href="/usuarios/registro" role="button">Criar conta</a>
+
         {{/if}}
 
         <br><br>
 
-        <h2>Informações recentes recentes: </h2>
+        <h2>Informações: </h2>
 
-        {{#each postagens}}
+        {{#each categorias }}
 
         <div class="card mt-4">
             <div class="card-body">
-                <h3>{{titulo}}</h3>
-                <p>{{descricao}}</p>
-                <a href="/postagem/{{slug}}"><button class="btn btn-success">Leia mais!</button></a>
+                <h3>Categoria: {{nome}}</h3>
+                <br>
+                <p>Slug: {{slug}}</p>
                 <hr>
-                <small>Categoria: {{categoria.nome}}</small><br>
-                <small>Data de publicação: {{data}}</small>
+                <p>Semestre: {{date}}</p>
+
             </div>
         </div>
 

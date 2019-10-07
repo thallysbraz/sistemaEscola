@@ -2,9 +2,11 @@
     <div class="jumbotron ">
         <h1 class="display-4 text-center"><strong>Página de categorias!</strong></h1>
 
-        <div class="card-body">
+        <div class="card-body" style="width: 18rem;">
 
             {{#each categorias}}
+
+
             <a href="/categorias/{{slug}}">
                 <button class="btn btn-primary btn-lg btn-block mt-4">{{nome}}</button>
             </a>
@@ -14,7 +16,7 @@
 
             {{#if user}}
             {{else}}
-            <a class="btn btn-primary mt-4" href="/usuarios/registro" role="button">Crie uma conta</a>
+
             {{/if}}
 
         </div>
