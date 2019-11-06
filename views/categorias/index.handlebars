@@ -1,11 +1,23 @@
-<div class="card-header">
-<h4>Categorias: </h4>
+<div>
+    <div class="jumbotron ">
+        <h1 class="display-4 text-center"><strong>Página de categorias!</strong></h1>
+
+        <div class="card-body">
+
+            {{#each categorias}}
+            <a href="/categorias/{{slug}}">
+                <button class="btn btn-primary btn-lg btn-block mt-4">{{nome}}</button>
+            </a>
+
+            {{else}}
+            {{/each}}
+
+            {{#if user}}
+            {{else}}
+            <a class="btn btn-primary mt-4" href="/usuarios/registro" role="button">Crie uma conta</a>
+            {{/if}}
+
+        </div>
+
+    </div>
 </div>
-<hr>
-{{#each categorias}}
-
-    <a href="/categorias/{{slug}}"><h5>{{nome}}</h5></a>
-
-{{else}}
-
-{{/each}}

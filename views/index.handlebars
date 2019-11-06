@@ -1,33 +1,37 @@
-<div class="jumbotron">
-    <h1 class="display-4">Bem-vindo ao App-Thallys!</h1>
-    <p class="lead">Essa e uma aplicação que é semelhante a um blog.</p>
-    <hr class="my-4">
-    <p>Desenvolvida com NodeJS e MongoDB</p>
-    {{#if user}}
-    {{else}}
-    <a class="btn btn-primary btn-lg" href="/usuarios/registro" role="button">Crie uma conta</a>
-    {{/if}}
-</div>
+<div>
+    <div class="jumbotron ">
+        <div class="text-center">
+            <h1 class="display-4"><strong>Bem-vindo!</strong></h1>
+            <p class="lead"><strong>First Educação e Tecnologia</strong></p>
+            <hr class="my-4">
+        </div>
+        {{#if user}}
+        {{else}}
+        <p class="lead"><strong>Não esta cadastrado? Crie uma conta agora!</strong></p>
+        <a class="btn btn-primary btn-lg" href="/usuarios/registro" role="button">Criar conta</a>
+        {{/if}}
 
-<hr>
+        <br><br>
 
-<h2>Informações recentes recentes: </h2>
+        <h2>Informações recentes: </h2>
 
-{{#each postagens}}
+        {{#each postagens}}
 
-<div class="card mt-4">
-    <div class="card-body">
-        <h3>{{titulo}}</h3>
-        <p>{{descricao}}</p><br>
-        <a href="/postagem/{{slug}}"><button class="btn btn-success">Leia mais!</button></a>
-        <hr>
-        <small>Categoria: {{categoria.nome}}</small><br>
-        <small>Data de publicação: {{data}}</small>
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3>{{titulo}}</h3>
+                <p>{{descricao}}</p>
+                <a href="/postagem/{{slug}}"><button class="btn btn-success">Leia mais!</button></a>
+                <hr>
+                <small>Categoria: {{categoria.nome}}</small><br>
+                <small>Data de publicação: {{data}}</small>
+            </div>
+        </div>
+
+        {{else}}
+
+        <h5 class="alert alert-danger">Nenhuma postagem</h5>
+
+        {{/each}}
     </div>
 </div>
-
-{{else}}
-
-<h5 class="alert alert-danger">Nenhuma postagem</h5>
-
-{{/each}}

@@ -11,12 +11,20 @@ const Usuario = new Schema({
     required: true
   },
   eAdmin: {
-    type: Number,
+    type: Boolean,
     default: 0
   },
   senha: {
     type: String,
     required: true
+  },
+  passwordResetToken: {
+    type: String,
+    select: false
+  },
+  passwordResetExpires: {
+    type: Date,
+    select: false
   }
 });
 

@@ -9,9 +9,11 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
 
+require("./models/Usuario");
 require("./models/Categoria");
 require("./models/Postagem");
 require("./config/auth")(passport);
+//require("./config/authADM")(passport);
 
 const Categoria = mongoose.model("categorias");
 const Postagem = mongoose.model("postagens");
@@ -39,8 +41,22 @@ app.use((req, res, next) => {
   res.locals.error_msg = req.flash("error_msg");
   res.locals.error = req.flash("error");
   res.locals.user = req.user || null;
+  if (global.adm == true) {
+    res.locals.adm2 = true;
+  } else {
+    res.locals.adm2 = false;
+  }
   next();
 });
+/*
+app.use((req, res, next) => {
+  if (global.adm == true) {
+    res.locals.adm2 = true;
+  } else {
+    res.locals.adm2 = false;
+  }
+  next();
+});*/
 
 //Body-parser
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -53,7 +69,7 @@ app.set("view engine", "handlebars");
 //Mongoose
 mongoose.Promise = global.Promise;
 mongoose
-  .connect("mongodb://localhost/blogapp")
+  .connect("mongodb://localhost/sistemaEscola", { useNewUrlParser: true })
   .then(() => {
     console.log("conectado ao banco MONGODB");
   })
@@ -140,7 +156,16 @@ app.get("/404", (req, res) => {
 });
 
 app.get("/posts", (req, res) => {
-  res.send("rota principal(posts)");
+  Postagem.find()
+    .populate("categoria")
+    .sort({ data: "desc" })
+    .then(postagens => {
+      res.render("posts", { postagens: postagens });
+    })
+    .catch(err => {
+      req.flash("error_msg", "Error interno ");
+      res.redirect("/404");
+    });
 });
 
 app.use("/admin", admin); // rota admin
@@ -148,11 +173,3 @@ app.use("/usuarios", usuarios); // rota usuario
 //outros
 
 app.listen(3000);
-
-/*
-
-AULA 60
-
-http://localhost:3000/admin/categorias
-
-*/
